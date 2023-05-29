@@ -1,0 +1,32 @@
+.function_container {
+  display: flex;
+  gap: 120px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.replace_container {
+  height: 200px;
+}
+.function_match {
+  color: #bdb7d6;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 29px;
+}
+.function_replace {
+  color: #bdb7d6;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 29px;
+}
+.label {
+  margin-left: 10px;
+}
+
+input[type="radio"] {
+  accent-color: #bdb7d6;
+}

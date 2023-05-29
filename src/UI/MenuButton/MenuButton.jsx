@@ -3,7 +3,7 @@ import classes from "./MenuButton.module.css";
 import RegExpression from "../RegExpression/RegExpression.jsx";
 
 const MenuButton = React.forwardRef((props) => {
-  let { children } = { ...props };
+  let { children, setter } = { ...props };
   const [menuVisible, setMenuVisible] = useState(false);
 
   return (
@@ -20,14 +20,26 @@ const MenuButton = React.forwardRef((props) => {
           {children}
         </h2>
         {menuVisible && (
-          <div class={classes.constructor}>
-            <RegExpression>
+          <div class={classes.regex_constructor}>
+            <RegExpression setter={setter}>
               Zero or more character<span class={classes.regSymbol}>*</span>
             </RegExpression>
-            <RegExpression>
+            <RegExpression setter={setter}>
               Any character<span class={classes.regSymbol}>.</span>
             </RegExpression>
-            <RegExpression>
+            <RegExpression setter={setter}>
+              Zero or one character<span class={classes.regSymbol}>?</span>
+            </RegExpression>
+            <RegExpression setter={setter}>
+              Zero or one character<span class={classes.regSymbol}>?</span>
+            </RegExpression>
+            <RegExpression setter={setter}>
+              Zero or one character<span class={classes.regSymbol}>?</span>
+            </RegExpression>
+            <RegExpression setter={setter}>
+              Zero or one character<span class={classes.regSymbol}>?</span>
+            </RegExpression>
+            <RegExpression setter={setter}>
               Zero or one character<span class={classes.regSymbol}>?</span>
             </RegExpression>
           </div>

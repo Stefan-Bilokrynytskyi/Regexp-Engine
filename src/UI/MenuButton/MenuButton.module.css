@@ -1,5 +1,5 @@
 .MenuButton {
-  padding: 5px 15px;
+  padding: 5px 5px;
 
   border-radius: 13px;
   background-color: #5f5c6e;
@@ -62,8 +62,10 @@
   right: 11px;
   transform: rotate(-45deg);
 }
-.constructor {
-  transition-delay: 1s;
+.regex_constructor {
+  max-height: 100px;
+  overflow: scroll;
+  overflow-x: hidden;
 }
 
 .regSymbol {
@@ -72,4 +74,7 @@
   color: black;
   font-weight: 400;
   font-size: 24px;
+}
+.radio {
+  accent-color: #bdb7d6;
 }

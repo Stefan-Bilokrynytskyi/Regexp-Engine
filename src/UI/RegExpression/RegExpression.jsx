@@ -5,7 +5,7 @@ const RegExpression = React.forwardRef((props) => {
   let { children, setter } = { ...props };
 
   function regOnclick() {
-    setter(children);
+    setter(children[1].props.children);
   }
 
   return (

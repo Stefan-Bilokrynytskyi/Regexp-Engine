@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import RegInput from "./UI/RegInput/RegInput.jsx";
 import TestString from "./UI/TestString/TestString.jsx";
 import MenuButton from "./UI/MenuButton/MenuButton.jsx";
-import RegExpression from "./UI/RegExpression/RegExpression.jsx";
+import ReplaceString from "./UI/ReplaceString/ReplaceString.jsx";
 import "./styles/reset.css";
 import "./styles/App.css";
 
 function App() {
   let [regex, setNewRegexp] = useState("");
   const setRegexp = (newRegexp) => {
-    regex = newRegexp;
+    regex += newRegexp;
     setNewRegexp(regex);
   };
 
@@ -30,9 +30,8 @@ function App() {
           </div>
 
           <div class="regex__constructor">
-            <RegExpression setter={setNewRegexp}>broo</RegExpression>
-            <MenuButton>REGEX CONSTRUCTOR</MenuButton>
-            <MenuButton>REPLACE STRING</MenuButton>
+            <MenuButton setter={setRegexp}>REGEX CONSTRUCTOR</MenuButton>
+            <ReplaceString></ReplaceString>
           </div>
         </div>
       </main>
