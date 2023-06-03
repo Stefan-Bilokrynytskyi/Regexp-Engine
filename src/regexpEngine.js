@@ -6,6 +6,24 @@ const isAlpha = function (ch) {
   );
 };
 
+function previousCh() {
+  function getPreviousCh() {
+    return getPreviousCh.ch;
+  }
+
+  getPreviousCh.ch = undefined;
+
+  return getPreviousCh;
+}
+const getPreviousCh = previousCh();
+
+const isWordBoundaryExp = (str) => str === "\\b";
+
+const isWordBoundary = (str) => {
+  if (getPreviousCh.ch === " " || getPreviousCh.ch === "\n") return true;
+  else return str[0] === " " || str[0] === "\n" || !getPreviousCh.ch;
+};
+
 const isDidgit = (ch) => {
   return typeof ch === "string" && ch.length === 1 && ch >= "0" && ch <= "9";
 };
@@ -99,7 +117,6 @@ function splitSet(setHead) {
 }
 
 function splitExpression(expr) {
-  console.log(expr);
   let head;
   let operator;
   let rest;
@@ -133,10 +150,11 @@ function splitExpression(expr) {
 
 function isUnitMatch(expr, string) {
   let [head, operator, rest] = splitExpression(expr);
-  if (string.length === 0) {
+  if (string.length === 0 && expr === "\\b") {
+    return true;
+  } else if (string.length === 0) {
     return false;
   }
-
   if (isLiteral(head)) {
     return expr[0] === string[0];
   } else if (isDot(head)) {
@@ -146,6 +164,8 @@ function isUnitMatch(expr, string) {
       return isAlpha(string[0]);
     } else if (head === "\\d") {
       return isDidgit(string[0]);
+    } else if (head === "\\b") {
+      return isWordBoundary(string);
     } else {
       return false;
     }
@@ -215,6 +235,7 @@ function matchMultiple(
       break;
     }
   }
+  getPreviousCh.ch = undefined;
 
   let matched;
   let newMatchLength;
@@ -298,7 +319,16 @@ function matchExpression(expr, string, matchLength = 0) {
     return matchAlternate(expr, string, matchLength);
   } else if (isUnit(head)) {
     if (isUnitMatch(expr, string)) {
-      return matchExpression(rest, string.slice(1), matchLength + 1);
+      if (
+        (!getPreviousCh.ch && head === "\\b") ||
+        (head === "\\b" && getPreviousCh.ch === " ")
+      ) {
+        getPreviousCh.ch = string[0];
+        return matchExpression(rest, string, matchLength);
+      } else {
+        getPreviousCh.ch = string[0];
+        return matchExpression(rest, string.slice(1), matchLength + 1);
+      }
     }
   } else {
     console.log(`Unknown token in expr ${expr}.`);
@@ -306,17 +336,9 @@ function matchExpression(expr, string, matchLength = 0) {
   return [false, undefined];
 }
 
-function match(expr, string) {
+function matchLoop(expr, string, maxMatchPos) {
   let matchPos = 0;
   let matched = false;
-  let maxMatchPos;
-  if (isStart(expr[0])) {
-    maxMatchPos = 0;
-    expr = expr.slice(1);
-  } else {
-    maxMatchPos = string.length - 1;
-  }
-
   while (!matched && matchPos <= maxMatchPos) {
     const [matched, matchLength] = matchExpression(
       expr,
@@ -327,27 +349,20 @@ function match(expr, string) {
     }
     matchPos += 1;
   }
+
   return [false, undefined, undefined];
 }
 
-function main() {
-  let expr = "\\a";
-  console.log(expr);
-  // let expr = '\\a+'
-
-  let string = "sa343";
-  let [matched, matchPos, matchLength] = match(expr, string);
-
-  if (matched) {
-    console.log(
-      `matchExpression(${expr}, ${string}) = ${string.slice(
-        matchPos,
-        matchPos + matchLength
-      )}`
-    );
+function match(expr, string) {
+  getPreviousCh.ch = undefined;
+  let maxMatchPos;
+  if (isStart(expr[0])) {
+    maxMatchPos = 0;
+    expr = expr.slice(1);
+    return matchLoop(expr, string, maxMatchPos);
   } else {
-    console.log(`matchExpression(${expr}, ${string}) = false`);
+    maxMatchPos = string.length - 1;
+    return matchLoop(expr, string, maxMatchPos);
   }
 }
-
-main();
+export default match;

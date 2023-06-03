@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { forwardRef } from "react";
 import classes from "./RegInput.module.css";
 
-const RegInput = (props) => {
-  console.log(props);
-  const { curregex, setNewRegexp } = { ...props };
-  console.log(curregex);
+const RegInput = forwardRef((props) => {
+  const { curregex, setNewRegexp, inputRef } = { ...props };
+
   return (
     <input
+      ref={inputRef}
       placeholder="enter text"
       className={classes.RegInput}
       onChange={(e) => setNewRegexp(e.target.value)}
@@ -14,6 +14,6 @@ const RegInput = (props) => {
       {...props}
     />
   );
-};
+});
 
 export default RegInput;

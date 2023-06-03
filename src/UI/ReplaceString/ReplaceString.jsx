@@ -2,14 +2,25 @@ import React, { useState } from "react";
 import classes from "./ReplaceString.module.css";
 import TestString from "../TestString/TestString.jsx";
 
-const ReplaceString = React.forwardRef((props) => {
-  let { children, setter } = { ...props };
+const ReplaceString = (props) => {
+  let { setReplaceString, resultString } = props;
 
   const [replaceVisible, setReplaceVisible] = useState(false);
-  /*
-  function onReplaceChange() {
-    replaceVisible = !replaceVisible;
-  }*/
+
+  const replaceStringOpen = (e) => {
+    setReplaceVisible(!replaceVisible);
+    setReplaceString("");
+  };
+
+  const replaceStringClosed = (e) => {
+    setReplaceVisible(!replaceVisible);
+    setReplaceString(undefined);
+  };
+
+  const setNewReplaceString = (e) => {
+    setReplaceString(e.target.value);
+  };
+
   return (
     <div class={classes.replace_container}>
       <div class={classes.function_container}>
@@ -20,7 +31,7 @@ const ReplaceString = React.forwardRef((props) => {
             id="match"
             name="function"
             value="match"
-            onChange={() => setReplaceVisible(!replaceVisible)}
+            onChange={replaceStringClosed}
           />
           <label for="match" class={classes.label}>
             MATCH
@@ -33,7 +44,7 @@ const ReplaceString = React.forwardRef((props) => {
             name="function"
             value="replace"
             checked={replaceVisible}
-            onChange={() => setReplaceVisible(!replaceVisible)}
+            onChange={replaceStringOpen}
           />
           <label for="replace" class={classes.label}>
             REPLACE
@@ -42,10 +53,20 @@ const ReplaceString = React.forwardRef((props) => {
       </div>
 
       {replaceVisible && (
-        <TestString style={{ width: "100%", flexGrow: "0" }}></TestString>
+        <div class={classes.replaceStringBlock}>
+          <textarea
+            class={classes.replaceString}
+            onChange={setNewReplaceString}
+          ></textarea>
+          <label class={classes.label}>RESULTS</label>
+          <div
+            class={classes.resultString}
+            dangerouslySetInnerHTML={{ __html: resultString }}
+          ></div>
+        </div>
       )}
     </div>
   );
-});
+};
 
 export default ReplaceString;

@@ -31,16 +31,39 @@ const MenuButton = React.forwardRef((props) => {
               Zero or one character<span class={classes.regSymbol}>?</span>
             </RegExpression>
             <RegExpression setter={setter}>
-              Zero or one character<span class={classes.regSymbol}>?</span>
+              At least one character<span class={classes.regSymbol}>+</span>
             </RegExpression>
             <RegExpression setter={setter}>
-              Zero or one character<span class={classes.regSymbol}>?</span>
+              A character in range<span class={classes.regSymbol}>[A-Z]</span>
             </RegExpression>
             <RegExpression setter={setter}>
-              Zero or one character<span class={classes.regSymbol}>?</span>
+              A character not in range
+              <span class={classes.regSymbol}>[^A-Z]</span>
             </RegExpression>
             <RegExpression setter={setter}>
-              Zero or one character<span class={classes.regSymbol}>?</span>
+              Word boundary<span class={classes.regSymbol}>\b</span>
+            </RegExpression>
+            <RegExpression setter={setter}>
+              Exactly 3 character
+              <span class={classes.regSymbol}>&#123;3&#125;</span>
+            </RegExpression>
+            <RegExpression setter={setter}>
+              3 and more characters
+              <span class={classes.regSymbol}>&#123;3,&#125;</span>
+            </RegExpression>
+            <RegExpression setter={setter}>
+              Between 3 and 5 characters
+              <span class={classes.regSymbol}>&#123;3,5&#125;</span>
+            </RegExpression>
+            <RegExpression setter={setter}>
+              Start of string<span class={classes.regSymbol}>^</span>
+            </RegExpression>
+            <RegExpression setter={setter}>
+              End of string<span class={classes.regSymbol}>$</span>
+            </RegExpression>
+            <RegExpression setter={setter}>
+              Alternate - match either a or b
+              <span class={classes.regSymbol}>(a|b)</span>
             </RegExpression>
           </div>
         )}
