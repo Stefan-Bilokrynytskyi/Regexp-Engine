@@ -3,7 +3,6 @@ import RegInput from "./UI/RegInput/RegInput.jsx";
 import TestString from "./UI/TestString/TestString.jsx";
 import MenuButton from "./UI/MenuButton/MenuButton.jsx";
 import ReplaceString from "./UI/ReplaceString/ReplaceString.jsx";
-
 import "./styles/reset.css";
 import "./styles/App.css";
 
@@ -37,7 +36,7 @@ function App() {
   return (
     <div className="App">
       <header className="header">
-        <h1>Regexp Online</h1>
+        <h1>Regexp Engine</h1>
         <div className="stick"></div>
         <span className="signature">Author: Stefan Bilokrynytskyi</span>
       </header>

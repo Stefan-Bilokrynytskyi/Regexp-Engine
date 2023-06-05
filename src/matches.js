@@ -1,7 +1,7 @@
 import match from "./regexpEngine";
 import "./Matches.css";
 
-const matches = (expr, string) => {
+const matchTestString = (expr, string) => {
   let resultString = "";
 
   let matched, matchPos, matchLength;
@@ -23,4 +23,4 @@ const matches = (expr, string) => {
   return resultString;
 };
 
-export default matches;
+export default matchTestString;

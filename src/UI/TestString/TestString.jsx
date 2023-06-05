@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import classes from "./TestString.module.css";
-import matches from "../../matches.js";
+import matchTestString from "../../matches.js";
 import replaceStr from "../../replace.js";
 
 const TestString = (props) => {
@@ -15,7 +15,10 @@ const TestString = (props) => {
     console.log("yeah");
     if (curregex !== prevRegex) {
       if (inputRef.current) {
-        const matchedString = matches(curregex, inputRef.current.textContent);
+        const matchedString = matchTestString(
+          curregex,
+          inputRef.current.textContent
+        );
         const resultString = replaceStr(
           curregex,
           inputRef.current.textContent,
@@ -28,7 +31,10 @@ const TestString = (props) => {
     } else if (prevReplaceString !== replaceString) {
       if (inputRef.current) {
         setPrevReplaceString(replaceString);
-        const matchedString = matches(curregex, inputRef.current.textContent);
+        const matchedString = matchTestString(
+          curregex,
+          inputRef.current.textContent
+        );
         const resultString = replaceStr(
           curregex,
           inputRef.current.textContent,
@@ -65,7 +71,7 @@ const TestString = (props) => {
     debounceTimeout = setTimeout(() => {
       setShouldMoveCursor(true);
       console.log("lol");
-      const matchedString = matches(curregex, newTestString);
+      const matchedString = matchTestString(curregex, newTestString);
       const resultString = replaceStr(curregex, newTestString, replaceString);
       setNewTestString(matchedString, resultString);
     }, 10);
