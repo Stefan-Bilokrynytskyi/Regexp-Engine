@@ -17,8 +17,6 @@ function previousCh() {
 }
 const getPreviousCh = previousCh();
 
-const isWordBoundaryExp = (str) => str === "\\b";
-
 const isWordBoundary = (str) => {
   if (getPreviousCh.ch === " " || getPreviousCh.ch === "\n") return true;
   else return str[0] === " " || str[0] === "\n" || !getPreviousCh.ch;
