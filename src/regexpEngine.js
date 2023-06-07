@@ -1,54 +1,3 @@
-const isAlpha = function (ch) {
-  return (
-    typeof ch === "string" &&
-    ch.length === 1 &&
-    ((ch >= "a" && ch <= "z") || (ch >= "A" && ch <= "Z"))
-  );
-};
-
-function previousCh() {
-  function getPreviousCh() {
-    return getPreviousCh.ch;
-  }
-
-  getPreviousCh.ch = undefined;
-
-  return getPreviousCh;
-}
-const getPreviousCh = previousCh();
-
-const isWordBoundary = (str) => {
-  if (getPreviousCh.ch === " " || getPreviousCh.ch === "\n") return true;
-  else return str[0] === " " || str[0] === "\n" || !getPreviousCh.ch;
-};
-
-const isDidgit = (ch) => {
-  return typeof ch === "string" && ch.length === 1 && ch >= "0" && ch <= "9";
-};
-
-const isInRange = (startOfRange, endOfRange, ch) => {
-  return ch >= startOfRange && ch <= endOfRange ? true : false;
-};
-
-const isOutOfRange = (startOfRange, endOfRange, ch) => {
-  return ch < startOfRange || ch > endOfRange ? true : false;
-};
-
-const isRegulator = (str) => (str ? str.includes("{") : false);
-
-const splitRegulator = (regulator, str) => {
-  if (regulator.includes(",")) {
-    regulator = regulator.slice(1, regulator.length - 1).split(",");
-
-    return regulator[1] === ""
-      ? [+regulator[0], str.length]
-      : regulator.map((el) => +el);
-  }
-  regulator = regulator.slice(1, regulator.length - 1);
-
-  return [+regulator, +regulator];
-};
-
 const isStart = (ch) => ch === "^";
 
 const isEnd = (ch) => ch === "$";
@@ -76,7 +25,7 @@ const isCloseSet = (ch) => ch === "]";
 
 const isOpenSet = (ch) => ch === "[";
 
-function isLiteral(ch) {
+const isLiteral = (ch) => {
   return (
     (typeof ch === "string" &&
       ch.length === 1 &&
@@ -85,36 +34,105 @@ function isLiteral(ch) {
     (typeof ch === "number" && ch <= 9 && ch >= 0) ||
     [" ", ":", "/"].includes(ch)
   );
-}
+};
 
-function isAlternate(term) {
-  return isOpenAlternate(term[0]) && isCloseAlternate(term.at(-1));
-}
+const isAlternate = (term) =>
+  isOpenAlternate(term[0]) && isCloseAlternate(term.at(-1));
 
-function isSet(term) {
-  return isOpenSet(term[0]) && isCloseSet(term.at(-1));
-}
+const isSet = (term) => isOpenSet(term[0]) && isCloseSet(term.at(-1));
 
-function isUnit(term) {
-  return (
-    isLiteral(term[0]) ||
-    isDot(term[0]) ||
-    isSet(term) ||
-    isEscapeSequence(term)
-  );
-}
+const isUnit = (term) =>
+  isLiteral(term[0]) || isDot(term[0]) || isSet(term) || isEscapeSequence(term);
 
-function splitAlternate(alternate) {
-  return alternate.slice(1, alternate.length - 1).split("|");
-}
+const isAlpha = (ch) =>
+  typeof ch === "string" && ch.length === 1 && /[a-zA-Z]/.test(ch);
 
-function splitSet(setHead) {
+const isDidgit = (ch) => {
+  return typeof ch === "string" && ch.length === 1 && ch >= "0" && ch <= "9";
+};
+
+const isInRange = (startOfRange, endOfRange, ch) => {
+  return ch >= startOfRange && ch <= endOfRange ? true : false;
+};
+
+const isOutOfRange = (startOfRange, endOfRange, ch) => {
+  return ch < startOfRange || ch > endOfRange ? true : false;
+};
+
+const isRegulator = (str) => (str ? str.includes("{") : false);
+
+const previousCh = () => {
+  function getPreviousCh() {
+    return getPreviousCh.ch;
+  }
+
+  getPreviousCh.ch = undefined;
+
+  return getPreviousCh;
+};
+const getPreviousCh = previousCh();
+
+const isWordBoundary = (str) => {
+  if (getPreviousCh.ch === " " || getPreviousCh.ch === "\n") return true;
+  else return str[0] === " " || str[0] === "\n" || !getPreviousCh.ch;
+};
+
+const splitRegulator = (regulator, str) => {
+  if (regulator.includes(",")) {
+    regulator = regulator.slice(1, regulator.length - 1).split(",");
+
+    return regulator[1] === ""
+      ? [+regulator[0], str.length]
+      : regulator.map((el) => +el);
+  }
+  regulator = regulator.slice(1, regulator.length - 1);
+
+  return [+regulator, +regulator];
+};
+
+const splitAlternate = (alternate) =>
+  alternate.slice(1, alternate.length - 1).split("|");
+
+const splitSet = (setHead) => {
   const setInside = setHead.slice(1, setHead.length - 1);
   const setTerms = setInside.split("");
   return setTerms;
-}
+};
 
-function splitExpression(expr) {
+const isInSet = (head, string) => {
+  let setTerms = splitSet(head);
+  if (setTerms[0] === "^") {
+    if (setTerms.includes("-")) {
+      while (setTerms.includes("-")) {
+        const startOfRange = setTerms[setTerms.indexOf("-") - 1];
+        const endOfRange = setTerms[setTerms.indexOf("-") + 1];
+        if (!isOutOfRange(startOfRange, endOfRange, string[0])) {
+          return false;
+        }
+        setTerms[setTerms.indexOf("-") - 1] = "";
+        setTerms[setTerms.indexOf("-") + 1] = "";
+        setTerms[setTerms.indexOf("-")] = "";
+      }
+    }
+    return !setTerms.includes(string[0]);
+  } else {
+    if (setTerms.includes("-")) {
+      while (setTerms.includes("-")) {
+        const startOfRange = setTerms[setTerms.indexOf("-") - 1];
+        const endOfRange = setTerms[setTerms.indexOf("-") + 1];
+        if (isInRange(startOfRange, endOfRange, string[0])) {
+          return true;
+        }
+        setTerms[setTerms.indexOf("-") - 1] = "";
+        setTerms[setTerms.indexOf("-") + 1] = "";
+        setTerms[setTerms.indexOf("-")] = "";
+      }
+    }
+    return setTerms.includes(string[0]);
+  }
+};
+
+const splitExpression = (expr) => {
   let head;
   let operator;
   let rest;
@@ -144,71 +162,34 @@ function splitExpression(expr) {
 
   rest = expr.slice(lastExprPos);
   return [head, operator, rest];
-}
+};
 
-function isUnitMatch(expr, string) {
+const isUnitMatch = (expr, string) => {
   let [head, operator, rest] = splitExpression(expr);
   if (string.length === 0 && expr === "\\b") {
     return true;
-  } else if (string.length === 0) {
-    return false;
-  }
-  if (isLiteral(head)) {
-    return expr[0] === string[0];
-  } else if (isDot(head)) {
-    return true;
-  } else if (isEscapeSequence(head)) {
-    if (head === "\\a") {
-      return isAlpha(string[0]);
-    } else if (head === "\\d") {
-      return isDidgit(string[0]);
-    } else if (head === "\\b") {
-      return isWordBoundary(string);
-    } else {
-      return false;
-    }
+  } else if (string.length === 0) return false;
+
+  if (isLiteral(head)) return expr[0] === string[0];
+  else if (isDot(head)) return true;
+  else if (isEscapeSequence(head)) {
+    if (head === "\\a") return isAlpha(string[0]);
+    else if (head === "\\d") return isDidgit(string[0]);
+    else if (head === "\\b") return isWordBoundary(string);
+    else return false;
   } else if (isSet(head)) {
-    let setTerms = splitSet(head);
-    if (setTerms[0] === "^") {
-      if (setTerms.includes("-")) {
-        while (setTerms.indexOf("-") !== -1) {
-          const startOfRange = setTerms[setTerms.indexOf("-") - 1];
-          const endOfRange = setTerms[setTerms.indexOf("-") + 1];
-          if (!isOutOfRange(startOfRange, endOfRange, string[0])) {
-            return false;
-          }
-          setTerms[setTerms.indexOf("-") - 1] = "";
-          setTerms[setTerms.indexOf("-") + 1] = "";
-          setTerms[setTerms.indexOf("-")] = "";
-        }
-      }
-      return !setTerms.includes(string[0]);
-    } else {
-      if (setTerms.includes("-")) {
-        while (setTerms.indexOf("-") !== -1) {
-          const startOfRange = setTerms[setTerms.indexOf("-") - 1];
-          const endOfRange = setTerms[setTerms.indexOf("-") + 1];
-          if (isInRange(startOfRange, endOfRange, string[0])) {
-            return true;
-          }
-          setTerms[setTerms.indexOf("-") - 1] = "";
-          setTerms[setTerms.indexOf("-") + 1] = "";
-          setTerms[setTerms.indexOf("-")] = "";
-        }
-      }
-      return setTerms.includes(string[0]);
-    }
+    return isInSet(head, string);
   }
   return false;
-}
+};
 
-function matchMultiple(
+const matchMultiple = (
   expr,
   string,
   matchLength,
   minMatchLength = undefined,
   maxMatchLength = undefined
-) {
+) => {
   let [head, operator, rest] = splitExpression(expr);
 
   if (!minMatchLength) {
@@ -253,25 +234,21 @@ function matchMultiple(
   }
 
   return [false, undefined];
-}
+};
 
-function matchStar(expr, string, matchLength) {
-  return matchMultiple(expr, string, matchLength, undefined, undefined);
-}
+const matchStar = (expr, string, matchLength) =>
+  matchMultiple(expr, string, matchLength, undefined, undefined);
 
-function matchPlus(expr, string, matchLength) {
-  return matchMultiple(expr, string, matchLength, 1, undefined);
-}
+const matchPlus = (expr, string, matchLength) =>
+  matchMultiple(expr, string, matchLength, 1, undefined);
 
-function matchQuestion(expr, string, matchLength) {
-  return matchMultiple(expr, string, matchLength, 0, 1);
-}
+const matchQuestion = (expr, string, matchLength) =>
+  matchMultiple(expr, string, matchLength, 0, 1);
 
-function matchRegulator(expr, string, matchLength, min, max) {
-  return matchMultiple(expr, string, matchLength, min, max);
-}
+const matchRegulator = (expr, string, matchLength, min, max) =>
+  matchMultiple(expr, string, matchLength, min, max);
 
-function matchAlternate(expr, string, matchLength) {
+const matchAlternate = (expr, string, matchLength) => {
   let [head, operator, rest] = splitExpression(expr);
   let options = splitAlternate(head);
   let matched;
@@ -288,9 +265,9 @@ function matchAlternate(expr, string, matchLength) {
   }
 
   return [false, undefined];
-}
+};
 
-function matchExpression(expr, string, matchLength = 0) {
+const matchExpression = (expr, string, matchLength = 0) => {
   if (expr.length === 0) {
     return [true, matchLength];
   } else if (isEnd(expr[0])) {
@@ -302,13 +279,11 @@ function matchExpression(expr, string, matchLength = 0) {
   }
   let [head, operator, rest] = splitExpression(expr);
 
-  if (isStar(operator)) {
-    return matchStar(expr, string, matchLength);
-  } else if (isPlus(operator)) {
-    return matchPlus(expr, string, matchLength);
-  } else if (isQuestion(operator)) {
+  if (isStar(operator)) return matchStar(expr, string, matchLength);
+  else if (isPlus(operator)) return matchPlus(expr, string, matchLength);
+  else if (isQuestion(operator))
     return matchQuestion(expr, string, matchLength);
-  } else if (isRegulator(operator)) {
+  else if (isRegulator(operator)) {
     const [min, max] = splitRegulator(operator, string);
     return min <= max
       ? matchRegulator(expr, string, matchLength, min, max)
@@ -332,9 +307,9 @@ function matchExpression(expr, string, matchLength = 0) {
     console.log(`Unknown token in expr ${expr}.`);
   }
   return [false, undefined];
-}
+};
 
-function matchLoop(expr, string, maxMatchPos) {
+const matchLoop = (expr, string, maxMatchPos) => {
   let matchPos = 0;
   let matched = false;
   while (!matched && matchPos <= maxMatchPos) {
@@ -349,9 +324,9 @@ function matchLoop(expr, string, maxMatchPos) {
   }
 
   return [false, undefined, undefined];
-}
+};
 
-function match(expr, string) {
+const match = (expr, string) => {
   getPreviousCh.ch = undefined;
   let maxMatchPos;
   if (isStart(expr[0])) {
@@ -362,5 +337,5 @@ function match(expr, string) {
     maxMatchPos = string.length - 1;
     return matchLoop(expr, string, maxMatchPos);
   }
-}
+};
 export default match;

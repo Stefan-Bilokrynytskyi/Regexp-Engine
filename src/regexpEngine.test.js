@@ -1,6 +1,6 @@
 import match from "./regexpEngine";
 
-describe("List based on array ", () => {
+describe("Regexp Engine Test", () => {
   it("character", () => {
     const [matched, matchPos, matchLength] = match("c", "abcd");
     expect(matchPos).toBe(2);

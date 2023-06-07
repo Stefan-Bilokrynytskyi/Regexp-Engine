@@ -7,10 +7,10 @@ import "./styles/reset.css";
 import "./styles/App.css";
 
 function App() {
-  let [regex, setNewRegexp] = useState("");
-  let [resultString, setResultString] = useState("");
-  let [replaceString, setNewReplaceString] = useState(undefined);
-  let regInputRef = useRef(null);
+  const [regex, setNewRegexp] = useState("");
+  const [resultString, setResultString] = useState("");
+  const [replaceString, setNewReplaceString] = useState(undefined);
+  const regInputRef = useRef(null);
 
   const setRegexp = (newRegexp) => {
     regex += newRegexp;
