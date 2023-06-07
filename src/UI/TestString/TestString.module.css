@@ -1,0 +1,27 @@
+.TestString {
+  padding: 5px 15px;
+  resize: none;
+  border-radius: 13px;
+  background-color: #5f5c6e;
+  color: black;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 29px;
+
+  flex: 1 1 auto;
+}
+
+::-webkit-input-placeholder {
+  color: rgb(71, 70, 70);
+}
+:-moz-placeholder {
+  color: rgb(43, 41, 41);
+}
+s ::-moz-placeholder {
+  color: rgb(43, 41, 41);
+}
+:-ms-input-placeholder {
+  color: rgb(43, 41, 41);
+}

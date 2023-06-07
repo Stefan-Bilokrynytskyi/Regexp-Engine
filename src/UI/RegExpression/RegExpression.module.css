@@ -1,0 +1,20 @@
+.RegExpression {
+  position: relative;
+  background-color: #5f5c6e;
+  color: #bdb7d6;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
+
+  width: 100%;
+
+  padding: 2px 5px;
+  text-align: left;
+  margin: 0px;
+}
+
+.RegExpression:hover {
+  background-color: #b1acc9;
+}
