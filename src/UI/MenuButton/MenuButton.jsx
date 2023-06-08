@@ -44,6 +44,12 @@ const MenuButton = React.forwardRef((props) => {
               Word boundary<span class={classes.regSymbol}>\b</span>
             </RegExpression>
             <RegExpression setter={setter}>
+              Any letter<span class={classes.regSymbol}>\a</span>
+            </RegExpression>
+            <RegExpression setter={setter}>
+              Any digit<span class={classes.regSymbol}>\d</span>
+            </RegExpression>
+            <RegExpression setter={setter}>
               Exactly 3 character
               <span class={classes.regSymbol}>&#123;3&#125;</span>
             </RegExpression>
