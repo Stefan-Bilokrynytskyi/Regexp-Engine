@@ -6,15 +6,20 @@ is a regular expression constructor due to to which you can easily learn how to 
 
 ## Get started
 > Before the usage you need to install the latest version of [Node.js](https://nodejs.org/en/download/)
-1. Clone the repository : 
+
+**1. Clone the repository:**
 ```
 git clone https://github.com/Stefan-Bilokrynytskyi/Regexp-Engine.git
 ```
-3. Install dependencies : 
+**2. Install dependencies:**
 ```
  npm i
 ```
-3. Run app: 
+**3. Install react dependencies:**
+```
+npm install react-scripts --save-dev
+```
+**4. Run app:**
  ```
  npm run start
  ```
